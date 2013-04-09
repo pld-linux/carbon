@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # carbon-cache  init file for starting up the carbon-cache daemon
 #
