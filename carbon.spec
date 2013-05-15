@@ -1,7 +1,7 @@
 Summary:	Back-end data caching and persistence daemon for Graphite
 Name:		carbon
 Version:	0.9.10
-Release:	0.1
+Release:	0.4
 License:	Apache v2.0
 Group:		Daemons
 Source0:	https://github.com/downloads/graphite-project/carbon/%{name}-%{version}.tar.gz
@@ -26,6 +26,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	python-TwistedCore >= 8.0
 Requires:	python-whisper
+Requires:	rc-scripts >= 0.4.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -132,7 +133,7 @@ fi
 %{py_sitescriptdir}/%{name}/aggregator/*.py[co]
 %{py_sitescriptdir}/%{name}-%{version}-py*.egg-info
 
-# FIXME/CHECKME: twisted itself packages /usr/lib64/python2.7/site-packages/twisted/plugins dir
+# FIXME/CHECKME: twisted itself packages %{py_sitedir}/twisted/plugins dir
 %dir %{py_sitescriptdir}/twisted
 %dir %{py_sitescriptdir}/twisted/plugins
 %{py_sitescriptdir}/twisted/plugins/carbon_*.py[co]
