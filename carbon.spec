@@ -1,7 +1,7 @@
 Summary:	Back-end data caching and persistence daemon for Graphite
 Name:		carbon
 Version:	0.9.10
-Release:	0.5
+Release:	0.6
 License:	Apache v2.0
 Group:		Daemons
 Source0:	https://github.com/downloads/graphite-project/carbon/%{name}-%{version}.tar.gz
@@ -141,3 +141,6 @@ fi
 %dir %{_localstatedir}/run/%{name}
 %dir %attr(775,root,carbon) %{_localstatedir}/log/%{name}
 %dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}
+%dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/rrd
+%dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/whisper
+%dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/lists
