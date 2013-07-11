@@ -2,7 +2,7 @@
 #
 # carbon-relay  init file for starting up the carbon-relay daemon
 #
-# chkconfig:   - 20 80
+# chkconfig:   2345 20 80
 # description: Starts and stops the carbon-relay daemon.
 
 # Source function library.

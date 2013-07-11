@@ -2,7 +2,7 @@
 #
 # carbon-cache  init file for starting up the carbon-cache daemon
 #
-# chkconfig:   - 20 80
+# chkconfig:   2345 20 80
 # description: Starts and stops the carbon-cache daemon.
 
 # Source function library.

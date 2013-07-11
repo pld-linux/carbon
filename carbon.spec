@@ -1,7 +1,7 @@
 Summary:	Back-end data caching and persistence daemon for Graphite
 Name:		carbon
 Version:	0.9.10
-Release:	0.4
+Release:	0.5
 License:	Apache v2.0
 Group:		Daemons
 Source0:	https://github.com/downloads/graphite-project/carbon/%{name}-%{version}.tar.gz

@@ -2,7 +2,7 @@
 #
 # carbon-aggregator  init file for starting up the carbon-aggregator daemon
 #
-# chkconfig:   - 20 80
+# chkconfig:   2345 20 80
 # description: Starts and stops the carbon-aggregator daemon.
 
 # Source function library.
