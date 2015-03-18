@@ -1,16 +1,17 @@
 Summary:	Back-end data caching and persistence daemon for Graphite
 Name:		carbon
-Version:	0.9.10
-Release:	0.6
+Version:	0.9.12
+Release:	1
 License:	Apache v2.0
 Group:		Daemons
-Source0:	https://github.com/downloads/graphite-project/carbon/%{name}-%{version}.tar.gz
-# Source0-md5:	053b2df1c928250f59518e9bb9f35ad5
+#               https://codeload.github.com/graphite-project/carbon/tar.gz/0.9.12
+Source0:	https://codeload.github.com/graphite-project/carbon/tar.gz/%{version}
+# Source0-md5:	674c7376be70b07a90eecf013dad6600
 Source1:	%{name}-cache.init
 Source2:	%{name}-relay.init
 Source3:	%{name}-aggregator.init
 Source4:	%{name}.sysconfig
-Patch0:		FHS.patch
+Source5:	%{name}.conf
 URL:		https://launchpad.net/graphite/
 BuildRequires:	python-devel
 BuildRequires:	python-setuptools
@@ -25,7 +26,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	python-TwistedCore >= 8.0
-Requires:	python-whisper
+Requires:	python-whisper >= %{version}
 Requires:	rc-scripts >= 0.4.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -39,16 +40,21 @@ Carbon is a data collection and storage agent.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__python} setup.py build
 
+
 %install
 rm -rf $RPM_BUILD_ROOT
+
+# http://graphite.readthedocs.org/en/0.9.12/install-source.html#installing-carbon-in-a-custom-location
 %{__python} setup.py install \
 	--skip-build \
 	--optimize=2 \
+	--install-scripts=%{_bindir} \
+	--install-lib=%{py_sitescriptdir}/  \
+	--install-data=%{_sharedstatedir}/%{name}  \
 	--root=$RPM_BUILD_ROOT
 
 %py_postclean -x amqp_publisher.py,amqp_listener.py
@@ -66,7 +72,9 @@ install -Dp %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/carbon
 
 # Install default configuration files
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-install -Dp conf/carbon.conf.example $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/carbon.conf
+#install -Dp conf/carbon.conf.example
+install -Dp %{SOURCE5} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/carbon.conf
+
 install -Dp conf/storage-schemas.conf.example $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/storage-schemas.conf
 
 # Temp mv to non .py locations
@@ -76,6 +84,19 @@ cd $RPM_BUILD_ROOT%{_bindir}
 %{__mv} carbon-client.py carbon-client
 %{__mv} carbon-relay.py carbon-relay
 %{__mv} validate-storage-schemas.py validate-storage-schemas
+
+# Delete  conf examples as they go to doc anyway
+# /var/lib/carbon/conf/aggregation-rules.conf.example
+%{__rm} $RPM_BUILD_ROOT/var/lib/carbon/conf/*conf.example
+%{__rmdir} $RPM_BUILD_ROOT/var/lib/carbon/conf
+
+# Delete bogus logs
+%{__rmdir} $RPM_BUILD_ROOT/var/lib/carbon/storage/log
+
+# Mv /var/lib/carbon/storage  one lever higher
+%{__mv} $RPM_BUILD_ROOT/var/lib/carbon/storage/*  $RPM_BUILD_ROOT/var/lib/carbon
+%{__rmdir} $RPM_BUILD_ROOT/var/lib/carbon/storage
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -140,7 +161,7 @@ fi
 
 %dir %{_localstatedir}/run/%{name}
 %dir %attr(775,root,carbon) %{_localstatedir}/log/%{name}
-%dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}
+%dir %attr(775,root,root) %{_sharedstatedir}/%{name}
 %dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/rrd
 %dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/whisper
 %dir %attr(775,root,carbon) %{_sharedstatedir}/%{name}/lists
