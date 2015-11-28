@@ -42,16 +42,14 @@ Carbon is a data collection and storage agent.
 %setup -q
 
 %build
-%{__python} setup.py build
+%py_build
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 # http://graphite.readthedocs.org/en/0.9.12/install-source.html#installing-carbon-in-a-custom-location
-%{__python} setup.py install \
-	--skip-build \
-	--optimize=2 \
+%py_install \
 	--install-scripts=%{_bindir} \
 	--install-lib=%{py_sitescriptdir}/  \
 	--install-data=%{_sharedstatedir}/%{name}  \
