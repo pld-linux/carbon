@@ -16,7 +16,7 @@ URL:		https://launchpad.net/graphite/
 BuildRequires:	python-devel
 BuildRequires:	python-setuptools
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.658
+BuildRequires:	rpmbuild(macros) >= 1.710
 Provides:	group(carbon)
 Provides:	user(carbon)
 Requires(postun):	/usr/sbin/groupdel
